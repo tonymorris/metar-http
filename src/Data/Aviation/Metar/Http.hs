@@ -15,9 +15,8 @@ import Data.Functor((<$>))
 import Data.Function(($))
 import Data.List(intercalate, take)
 import Data.Maybe(Maybe(Nothing, Just), listToMaybe)
-import Text.Read(reads)
+import Data.String(String)
 import Data.Semigroup((<>))
-import Text.Show(show)
 import Data.Text(unpack, toLower)
 import Data.Tuple(fst)
 import Network.HTTP.Types.Header(hContentType)
@@ -26,6 +25,15 @@ import Network.Wai(Application, responseLBS, pathInfo)
 import Network.Wai.Handler.Warp(setPort, runSettings, defaultSettings)
 import System.Environment(getArgs)
 import System.IO(IO)
+import Text.Read(Read, reads)
+import Text.Show(show)
+
+readMaybe ::
+  Read a =>
+  String
+  -> Maybe a
+readMaybe n =
+  fst <$> listToMaybe (reads n)
 
 metarHTTPapp ::
   Application
@@ -43,8 +51,10 @@ metarHTTPapp req withResp =
                 unpack xxxx
               tk r' =
                 case unpack <$> r' of
+                  "":_ ->
+                    Just id
                   n:_ ->
-                    take . fst <$> listToMaybe (reads n)
+                    take <$> readMaybe n
                   [] ->
                     Just id
               mt =
@@ -98,7 +108,7 @@ metarHTTP =
               [] ->
                 id
               (q:_) ->
-                case fst <$> listToMaybe (reads q) of
+                case readMaybe q of
                   Nothing ->
                     id
                   Just n ->
