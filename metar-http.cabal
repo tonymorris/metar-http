@@ -7,7 +7,7 @@ maintainer:         Tony Morris <ʇǝu˙sıɹɹoɯʇ@sıɹɹoɯʇ>
 copyright:          Copyright (c) 2018, Tony Morris
 synopsis:           HTTP for METAR
 category:           Data, Aviation
-description:        HTTP for METAR
+description:        A trivial HTTP program for getting METAR
 homepage:           https://gitlab.com/tonymorris/metar-http
 bug-reports:        https://gitlab.com/tonymorris/metar-http/issues
 cabal-version:      >= 1.10
