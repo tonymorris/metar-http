@@ -5,7 +5,7 @@
 }:
 mkDerivation {
   pname = "metar-http";
-  version = "0.0.1";
+  version = "0.0.2";
   src = ./.;
   isLibrary = true;
   isExecutable = true;

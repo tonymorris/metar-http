@@ -39,7 +39,7 @@ metarHTTPapp ::
   Application
 metarHTTPapp req withResp =
   let msg =
-        "path /metar/<icao> or /metar/<icao>/<nlines> or /taf/<icao> or /taf/<icao>/<nlines>"
+        "path /metar/<icao> OR /metar/<icao>/<nlines> OR /taf/<icao> OR /taf/<icao>/<nlines> OR /metar/<icao>/* OR /taf/<icao>/*"
       _404 =
         responseLBS
           status404
@@ -53,6 +53,8 @@ metarHTTPapp req withResp =
                 case unpack <$> r' of
                   "":_ ->
                     Just id
+                  "*":_ ->
+                    Just (\k -> [intercalate " " k])
                   n:_ ->
                     take <$> readMaybe n
                   [] ->
