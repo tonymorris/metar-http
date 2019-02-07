@@ -6,15 +6,17 @@ module Data.Aviation.Metar.Http(
 , metarHTTPapp
 ) where
 
+import Control.Applicative(pure)
 import Control.Category((.), id)
-import Control.Lens((^.), (^?), _Wrapped)
+import Control.Lens((^.), (^?), _Wrapped, folded)
+import Control.Monad((>>=))
 import Data.Aviation.Metar(getAllMETAR, getAllTAF)
 import Data.Aviation.Metar.TAFResult(_TAFResultValue)
 import Data.ByteString.Lazy.UTF8 hiding (take)
 import Data.Functor((<$>))
 import Data.Function(($))
 import Data.List(intercalate, take)
-import Data.Maybe(Maybe(Nothing, Just), listToMaybe)
+import Data.Maybe(Maybe(Nothing, Just), fromMaybe)
 import Data.String(String)
 import Data.Semigroup((<>))
 import Data.Text(unpack, toLower)
@@ -33,7 +35,7 @@ readMaybe ::
   String
   -> Maybe a
 readMaybe n =
-  fst <$> listToMaybe (reads n)
+  fst <$> reads n ^? folded
 
 metarHTTPapp ::
   Application
@@ -53,8 +55,12 @@ metarHTTPapp req withResp =
                 case unpack <$> r' of
                   "":_ ->
                     Just id
-                  "*":_ ->
-                    Just (\k -> [intercalate " " k])
+                  "*":z ->
+                    let z' =
+                          z ^? folded >>=
+                          readMaybe >>=
+                          pure . take
+                    in  Just (\k -> [fromMaybe id z' (intercalate " " k)])
                   n:_ ->
                     take <$> readMaybe n
                   [] ->
