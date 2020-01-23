@@ -24,7 +24,7 @@ import Data.Tuple(fst)
 import Network.HTTP.Types.Header(hContentType)
 import Network.HTTP.Types.Status(status404, status200)
 import Network.Wai(Application, responseLBS, pathInfo)
-import Network.Wai.Handler.Warp(setPort, runSettings, defaultSettings)
+import Network.Wai.Handler.Warp(setPort, setTimeout, runSettings, defaultSettings)
 import System.Environment(getArgs)
 import System.IO(IO)
 import Text.Read(Read, reads)
@@ -244,4 +244,4 @@ metarHTTP =
                     id
                   Just n ->
                     setPort n
-      runSettings (p defaultSettings) metarHTTPapp
+      runSettings (setTimeout 6 (p defaultSettings)) metarHTTPapp
