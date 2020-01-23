@@ -39,6 +39,7 @@ library
                     
   ghc-options:
                     -Wall
+                    -threaded
 
   default-extensions:
   
@@ -63,6 +64,7 @@ executable          metar-http
 
   ghc-options:
                     -Wall
+                    -threaded
 
   default-extensions:
                     NoImplicitPrelude
