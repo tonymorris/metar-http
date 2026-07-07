@@ -1,3 +1,10 @@
+0.0.4
+
+* Update to GHC 9.6.7 compatibility
+* Update to metar-0.0.4 library (uses getNOAAMETAR)
+* Remove TAF support (not available in metar-0.0.4)
+* Relax dependency upper bounds for modern GHC
+
 0.0.3
 
 * refactor of code to allow more options
