@@ -8,8 +8,8 @@ module Data.Aviation.Metar.Http(
 
 import Control.Category((.), id)
 import Control.Lens((^.), (^?), _Wrapped, folded)
-import Data.Aviation.Metar(getAllMETAR, getAllTAF)
-import Data.Aviation.Metar.TAFResult(_TAFResultValue)
+import Data.Aviation.Metar(getNOAAMETAR)
+import Data.Aviation.Metar.METARResult(_METARResultValue)
 import Data.ByteString.Lazy.UTF8 hiding (take, splitAt)
 import Data.Eq(Eq)
 import Data.Functor((<$>))
@@ -173,14 +173,6 @@ metarHTTPapp req withResp =
             "metar for station <icao> all on one line truncated at <maxchars>" <//>
             "/metar/<icao>/*/<maxchars>/<appendstr>" </>
             "metar for station <icao> all on one line truncated at <maxchars> and if truncation occurs, append <appendstr>" <//>
-            "/taf/<icao>" </>
-            "raw taf for station <icao>" <//>
-            "/taf/<icao>/*" </>
-            "taf for station <icao> all on one line" <//>
-            "/taf/<icao>/*/<maxchars>" </>
-            "taf for station <icao> all on one line truncated at <maxchars>" <//>
-            "/taf/<icao>/*/<maxchars>/<appendstr>" </>
-            "taf for station <icao> all on one line truncated at <maxchars> and if truncation occurs, append <appendstr>" <//>
             ""
       _404 =
         responseLBS
@@ -199,9 +191,9 @@ metarHTTPapp req withResp =
               mt =
                 case toLower rpt of
                   "metar" ->
-                    Just ("METAR", getAllMETAR xxxx')
+                    Just ("METAR", getNOAAMETAR xxxx')
                   "taf" ->
-                    Just ("TAF", getAllTAF xxxx')
+                    Nothing
                   _ ->
                     Nothing
           in  case mt of
@@ -210,8 +202,8 @@ metarHTTPapp req withResp =
                 Just (mtt, mtf) ->
                   do  t <- mtf ^. _Wrapped
                       withResp $
-                        case t ^? _TAFResultValue of
-                          Nothing -> 
+                        case t ^? _METARResultValue of
+                          Nothing ->
                             responseLBS
                               status404
                               []
@@ -220,7 +212,7 @@ metarHTTPapp req withResp =
                             responseLBS
                               status200
                               [(hContentType, "text/plain")]
-                              (fromString (modifyOutput x))
+                              (fromString (modifyOutput [x]))
         [] ->
           withResp $
             responseLBS
