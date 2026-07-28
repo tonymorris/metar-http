@@ -1,3 +1,13 @@
+0.0.5
+
+* Update to metar-0.0.5 library
+* Use `getMETAR` (BOM for `Y*` codes, NOAA fallback) instead of NOAA only
+* Add hlint and fourmolu configuration
+* Add `bin/lint.sh` and `bin/test.sh`
+* Add doctests; remove empty test-suite
+* Add `{-# OPTIONS_GHC -Wall #-}` to all source files
+* Remove `NoImplicitPrelude`
+
 0.0.4
 
 * Update to GHC 9.6.7 compatibility

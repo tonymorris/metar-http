@@ -1,14 +1,12 @@
-{-# LANGUAGE NoImplicitPrelude #-}
+{-# OPTIONS_GHC -Wall #-}
 
-module Main(
-  main
+module Main (
+  main,
 ) where
 
-import System.IO(IO)
-import Data.Aviation.Metar.Http(metarHTTP)
+import Data.Aviation.Metar.Http (metarHTTP)
 
 main ::
   IO ()
 main =
   metarHTTP
-  
