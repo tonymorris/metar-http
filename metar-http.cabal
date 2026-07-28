@@ -26,7 +26,7 @@ library
                     base >= 4.8 && < 5
                     , http-types >= 0.9 && < 1
                     , lens >= 4 && < 6
-                    , metar >= 0.0.5 && < 1.0
+                    , metar >= 0.0.5 && < 1
                     , network-uri >= 2.6 && < 3
                     , text >= 1.2 && < 3
                     , semigroups >= 0.9 && < 1
